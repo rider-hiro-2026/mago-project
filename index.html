@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>お孫さんアルバム</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #f0f0f0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        #album-container {
+            position: relative;
+            width: 95vw;
+            max-width: 1000px;
+            aspect-ratio: 1000 / 750;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        #bg-img {
+            position: absolute;
+            width: 85%;
+            height: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        .mago {
+            position: absolute;
+            height: 95%;
+            width: auto;
+            top: 50%;
+            display: none;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        #mago1 { left: 33%; }
+        #mago2 { left: 50%; }
+        #mago3 { left: 67%; }
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        input { padding: 12px; font-size: 18px; margin: 10px; border: 2px solid #ddd; border-radius: 8px; }
+        button { padding: 12px 30px; font-size: 18px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <h2>合言葉を入れてください</h2>
+    <input type="password" id="passInput" placeholder="数字4桁">
+    <button onclick="checkPass()">入室</button>
+</div>
+
+<div id="album-container" onclick="handleClick(event)">
+    <img src="grandchildren.jpg" id="bg-img">
+    <img src="mago1.png" id="mago1" class="mago">
+    <img src="mago2.png" id="mago2" class="mago">
+    <img src="mago3.png" id="mago3" class="mago">
+</div>
+
+<script>
+    const SECRET_PASS = "1234"; 
+
+    function checkPass() {
+        const input = document.getElementById('passInput').value;
+        if(input === SECRET_PASS) {
+            document.getElementById('login-screen').style.display = 'none';
+        } else {
+            alert("合言葉が違います");
+        }
+    }
+
+    function handleClick(e) {
+        const magos = document.querySelectorAll('.mago');
+        let isAnyVisible = false;
+        magos.forEach(m => {
+            if(m.style.display === 'block') {
+                m.style.display = 'none';
+                isAnyVisible = true;
+            }
+        });
+        if (isAnyVisible) return;
+        const container = document.getElementById('album-container');
+        const rect = container.getBoundingClientRect();
+        const xPercent = (e.clientX - rect.left) / rect.width;
+        if (xPercent < 0.4) {
+            document.getElementById('mago1').style.display = 'block';
+        } else if (xPercent < 0.6) {
+            document.getElementById('mago2').style.display = 'block';
+        } else {
+            document.getElementById('mago3').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
